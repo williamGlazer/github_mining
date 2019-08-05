@@ -126,7 +126,7 @@ def get_pullReq(repo_url, user, passwd):
 def get_pullReq_commits(pullreq_url, user, passwd):
     """
     pullreq_url is from the dictionnary  outputted by get_pullreq
-    dict['commits']['href']
+    dict['_links']['commits']['href']
     user and passwd required to have 5000 request limit
 
     :Returns:

@@ -53,7 +53,7 @@ def get_depends(github_urls):
             depend_dict['dependents'].append(dep['dependents'])
             depend_dict['dependencies'].append(dep['dependencies'])
             pages_visited += 1
-            progress(pages_visited, n_urls)
+            progress(pages_visited-1, n_urls)
         browser.quit()
 
     return depend_dict
@@ -76,7 +76,7 @@ def get_depend(browser, github_url, dependencies=False, dependants=False):
     if dependencies == dependants:
         dependencies = get_depend(browser, github_url, dependencies=True)
         dependants = get_depend(browser, github_url, dependants=True)
-        return {'dependencies':dependencies, 'dependants':dependants}
+        return {'dependencies':dependencies, 'dependents':dependants}
 
     #otherwise
     elif dependencies:
@@ -99,10 +99,7 @@ def get_depend(browser, github_url, dependencies=False, dependants=False):
         pages_left = True
         while pages_left:
             #find all links
-            links = browser.find_elements_by_xpath(
-                "//a[contains(@data-hovercard-type,\'repository\')\
-                and (contains(@class,\'text-bold\') \
-                 or contains(@data-octo-click,\'dep_graph_package\')\)]")
+            links = browser.find_elements_by_xpath("//a[contains(@data-hovercard-type,\'repository\') and (contains(@class,\'text-bold\') or contains(@data-octo-click,\'dep_graph_package\'))]")
             for link in links:
                 url = link.get_attribute("href")
                 dep = url[19:] #remove 'github.com'
